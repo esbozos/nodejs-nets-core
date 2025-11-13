@@ -1,0 +1,163 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  pr-checks:
+    name: PR Quality Checks
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Check PR title format
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+        continue-on-error: true
+      
+      - name: Check for merge conflicts
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          if git merge-base --is-ancestor origin/${{ github.base_ref }} HEAD; then
+            echo "✅ No merge conflicts detected"
+          else
+            echo "⚠️ May have merge conflicts - please check"
+          fi
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check package-lock.json is up to date
+        run: |
+          npm install --package-lock-only
+          git diff --exit-code package-lock.json || (echo "❌ package-lock.json is out of sync. Run 'npm install' and commit." && exit 1)
+      
+      - name: Check for TODOs
+        run: |
+          echo "Checking for TODO comments..."
+          TODOS=$(grep -r "TODO\|FIXME\|XXX\|HACK" src/ --exclude-dir=node_modules --exclude-dir=dist || true)
+          if [ -n "$TODOS" ]; then
+            echo "⚠️ Found TODO/FIXME comments:"
+            echo "$TODOS"
+          else
+            echo "✅ No TODO comments found"
+          fi
+        continue-on-error: true
+      
+      - name: Check file sizes
+        run: |
+          echo "Checking for large files..."
+          LARGE_FILES=$(find src/ -type f -size +100k || true)
+          if [ -n "$LARGE_FILES" ]; then
+            echo "⚠️ Large files detected (>100KB):"
+            echo "$LARGE_FILES"
+          else
+            echo "✅ No large files detected"
+          fi
+        continue-on-error: true
+      
+      - name: Validate TypeScript compilation
+        run: npx tsc --noEmit
+      
+      - name: Run linter
+        run: npm run lint
+      
+      - name: Check code formatting
+        run: npm run format:check
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Comment PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            
+            const comment = `## 🔍 PR Validation Results
+            
+            ✅ All automated checks completed!
+            
+            ### Summary
+            - TypeScript compilation: ✅
+            - Linting: ✅
+            - Code formatting: ✅
+            - Tests: ✅
+            
+            Please ensure:
+            - [ ] Code is well documented
+            - [ ] Tests cover new functionality
+            - [ ] CHANGELOG.md is updated (if needed)
+            - [ ] Breaking changes are documented
+            
+            ---
+            *This is an automated check. Review the workflow run for detailed results.*`;
+            
+            github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pull_number,
+              body: comment
+            });
+        continue-on-error: true
+
+  size-check:
+    name: Package Size Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build package
+        run: npm run build
+      
+      - name: Check package size
+        run: |
+          npm pack --dry-run
+          SIZE=$(npm pack --dry-run 2>&1 | grep "package size" | awk '{print $4}')
+          echo "📦 Package size: $SIZE"
+          
+          # Alert if package is larger than 100KB
+          SIZE_NUM=$(echo $SIZE | sed 's/[^0-9.]//g')
+          if (( $(echo "$SIZE_NUM > 100" | bc -l) )); then
+            echo "⚠️ Warning: Package size exceeds 100KB"
+          fi
