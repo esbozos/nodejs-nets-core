@@ -17,18 +17,18 @@ export const initializeDatabase = (config: NetsCoreConfig['database']): Sequeliz
       timestamps: true,
       underscored: true,
       createdAt: 'created',
-      updatedAt: 'updated'
+      updatedAt: 'updated',
     },
     pool: {
       max: 5,
       min: 0,
       acquire: 30000,
-      idle: 10000
-    }
+      idle: 10000,
+    },
   };
 
   sequelizeInstance = new Sequelize(options);
-  
+
   return sequelizeInstance;
 };
 

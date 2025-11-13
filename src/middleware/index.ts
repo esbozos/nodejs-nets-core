@@ -14,7 +14,7 @@ export const authMiddleware = (secret: string) => {
       }
 
       const parts = authHeader.split(' ');
-      
+
       if (parts.length !== 2 || parts[0] !== 'Bearer') {
         req.user = null;
         return next();
@@ -24,9 +24,9 @@ export const authMiddleware = (secret: string) => {
 
       try {
         const decoded = jwt.verify(token, secret) as any;
-        
+
         const user = await User.findByPk(decoded.userId);
-        
+
         if (!user || !user.isActive) {
           req.user = null;
           return next();
@@ -50,7 +50,7 @@ export const requireAuth = () => {
     if (!req.user) {
       return res.status(401).json({
         res: 0,
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
     next();
@@ -62,7 +62,7 @@ export const checkPermission = (permission: string) => {
     if (!req.user) {
       return res.status(401).json({
         res: 0,
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
 
@@ -73,7 +73,7 @@ export const checkPermission = (permission: string) => {
     if (!hasPermission) {
       return res.status(403).json({
         res: 0,
-        message: 'Permission denied'
+        message: 'Permission denied',
       });
     }
 

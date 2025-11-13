@@ -19,7 +19,7 @@ export class EmailService {
       host: this.config.host,
       port: this.config.port || 587,
       secure: this.config.secure || false,
-      auth: this.config.auth
+      auth: this.config.auth,
     });
   }
 
@@ -68,7 +68,7 @@ export class EmailService {
       txtTemplate,
       toQueued = true,
       force = false,
-      html
+      html,
     } = options;
 
     // Check if emails are disabled in development
@@ -144,7 +144,7 @@ export class EmailService {
         to: validEmails,
         subject,
         html: contentHtml,
-        text: contentTxt
+        text: contentTxt,
       };
 
       const result = await this.transporter.sendMail(mailOptions);
@@ -160,7 +160,11 @@ export class EmailService {
     }
   }
 
-  async sendVerificationCodeEmail(email: string, code: string, userName?: string): Promise<[boolean, string, string]> {
+  async sendVerificationCodeEmail(
+    email: string,
+    code: string,
+    userName?: string
+  ): Promise<[boolean, string, string]> {
     return this.sendEmail({
       subject: 'Your Verification Code',
       email,
@@ -168,12 +172,15 @@ export class EmailService {
       context: {
         code,
         userName: userName || 'User',
-        expiresIn: '15 minutes'
-      }
+        expiresIn: '15 minutes',
+      },
     });
   }
 
-  async sendNewLoginNotification(email: string, deviceInfo: any): Promise<[boolean, string, string]> {
+  async sendNewLoginNotification(
+    email: string,
+    deviceInfo: any
+  ): Promise<[boolean, string, string]> {
     return this.sendEmail({
       subject: 'New Login Detected',
       email,
@@ -182,8 +189,8 @@ export class EmailService {
         deviceName: deviceInfo.name,
         os: deviceInfo.os,
         location: deviceInfo.location || 'Unknown',
-        time: new Date().toLocaleString()
-      }
+        time: new Date().toLocaleString(),
+      },
     });
   }
 }

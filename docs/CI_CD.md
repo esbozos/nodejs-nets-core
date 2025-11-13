@@ -9,6 +9,7 @@ Este proyecto utiliza GitHub Actions para automatizar builds, tests, security ch
 **Trigger:** Push y Pull Requests a `main`, `master`, `develop`
 
 **Jobs:**
+
 - **Lint**: Ejecuta ESLint y verifica formato del código
 - **Build**: Compila TypeScript y genera artefactos
 - **Test**: Ejecuta tests en Node.js 18, 20 y 22
@@ -23,6 +24,7 @@ Este proyecto utiliza GitHub Actions para automatizar builds, tests, security ch
 **Trigger:** Push de tags con formato `v*.*.*` (ej: `v1.0.0`)
 
 **Jobs:**
+
 1. **Validate**: Ejecuta lint, tests y build
 2. **Publish to npm**: Publica el paquete en npm
 3. **Create Release**: Crea GitHub Release con changelog
@@ -46,10 +48,12 @@ git push origin master --tags
 ### 3. CodeQL Security - `codeql.yml`
 
 **Trigger:**
+
 - Push y PR a `main`, `master`, `develop`
 - Schedule: Cada lunes a las 00:00 UTC
 
 **Funcionalidad:**
+
 - Análisis estático de seguridad
 - Detección de vulnerabilidades
 - Escaneo de calidad de código
@@ -57,6 +61,7 @@ git push origin master --tags
 ### 4. Dependabot - `dependabot.yml`
 
 **Funcionalidad:**
+
 - Actualiza dependencias npm semanalmente (lunes 09:00)
 - Agrupa actualizaciones por tipo
 - Actualiza GitHub Actions mensualmente
@@ -67,9 +72,11 @@ git push origin master --tags
 Para que los workflows funcionen correctamente, configura estos secrets en GitHub:
 
 ### NPM_TOKEN
+
 **Ubicación:** Settings → Secrets and variables → Actions → New repository secret
 
 **Cómo obtenerlo:**
+
 1. Ir a https://www.npmjs.com/
 2. Login → Account → Access Tokens
 3. Generate New Token → Automation
@@ -77,12 +84,14 @@ Para que los workflows funcionen correctamente, configura estos secrets en GitHu
 5. Agregar como secret `NPM_TOKEN` en GitHub
 
 **Verificación:**
+
 ```bash
 # El token ya está en tu entorno como NPM_TOKEN
 echo $NPM_TOKEN
 ```
 
 ### GITHUB_TOKEN
+
 Este token es proporcionado automáticamente por GitHub Actions, no necesitas configurarlo.
 
 ## 🚀 Flujo de Trabajo Completo
@@ -153,7 +162,7 @@ Edita `.github/dependabot.yml`:
 
 ```yaml
 schedule:
-  interval: "daily"  # o "weekly", "monthly"
+  interval: 'daily' # o "weekly", "monthly"
 ```
 
 ### Agregar más versiones de Node.js al CI
@@ -163,7 +172,7 @@ Edita `.github/workflows/ci.yml`:
 ```yaml
 strategy:
   matrix:
-    node-version: [18, 20, 22, 23]  # Agregar versiones
+    node-version: [18, 20, 22, 23] # Agregar versiones
 ```
 
 ### Modificar reglas de npm audit
@@ -172,7 +181,7 @@ Edita `.github/workflows/ci.yml`:
 
 ```yaml
 - name: Check for vulnerabilities
-  run: npm audit --audit-level=critical  # o moderate, high
+  run: npm audit --audit-level=critical # o moderate, high
 ```
 
 ## 🐛 Troubleshooting
@@ -182,6 +191,7 @@ Edita `.github/workflows/ci.yml`:
 **Problema:** Organización npm no existe o no tienes permisos
 
 **Solución:**
+
 1. Verifica que seas owner de @meregy: `npm org ls meregy`
 2. Verifica que NPM_TOKEN tenga permisos de Automation
 3. Verifica que `publishConfig.access: "public"` esté en package.json
@@ -191,6 +201,7 @@ Edita `.github/workflows/ci.yml`:
 **Problema:** Diferencias de entorno o versiones
 
 **Solución:**
+
 1. Verifica versión de Node.js: `node --version`
 2. Limpia cache: `npm ci` en lugar de `npm install`
 3. Revisa variables de entorno necesarias
@@ -201,7 +212,7 @@ Edita `.github/workflows/ci.yml`:
 Edita `.github/dependabot.yml`:
 
 ```yaml
-open-pull-requests-limit: 5  # Reducir límite
+open-pull-requests-limit: 5 # Reducir límite
 ```
 
 O agrupa más actualizaciones:
@@ -210,10 +221,10 @@ O agrupa más actualizaciones:
 groups:
   all-dependencies:
     patterns:
-      - "*"
+      - '*'
     update-types:
-      - "minor"
-      - "patch"
+      - 'minor'
+      - 'patch'
 ```
 
 ## 📚 Referencias

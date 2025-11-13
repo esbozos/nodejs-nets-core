@@ -5,7 +5,7 @@ import {
   CreationOptional,
   Association,
   BelongsToManyGetAssociationsMixin,
-  BelongsToManyAddAssociationMixin
+  BelongsToManyAddAssociationMixin,
 } from 'sequelize';
 import { NetsCoreBaseModel, NetsCoreBaseModelAttributes } from './base';
 
@@ -31,8 +31,8 @@ export class Permission extends NetsCoreBaseModel<PermissionAttributes> {
       where: { codename: codename.toLowerCase() } as any,
       defaults: {
         codename: codename.toLowerCase(),
-        name: name || codename
-      } as any
+        name: name || codename,
+      } as any,
     });
     return permission;
   }
@@ -67,7 +67,7 @@ export class Role extends NetsCoreBaseModel<RoleAttributes> {
 
   async hasPermission(permissionCodename: string): Promise<boolean> {
     const permissions = await this.getPermissions({
-      where: { codename: permissionCodename.toLowerCase() }
+      where: { codename: permissionCodename.toLowerCase() },
     });
     return permissions.length > 0;
   }
@@ -115,46 +115,46 @@ export const PermissionModelAttributes: ModelAttributes = {
   ...NetsCoreBaseModelAttributes,
   name: {
     type: DataTypes.STRING(150),
-    allowNull: false
+    allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(150),
     allowNull: false,
-    unique: true
+    unique: true,
   },
   description: {
     type: DataTypes.STRING(250),
-    allowNull: true
-  }
+    allowNull: true,
+  },
 };
 
 export const RoleModelAttributes: ModelAttributes = {
   ...NetsCoreBaseModelAttributes,
   name: {
     type: DataTypes.STRING(150),
-    allowNull: false
+    allowNull: false,
   },
   codename: {
     type: DataTypes.STRING(150),
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: DataTypes.STRING(250),
-    allowNull: false
+    allowNull: false,
   },
   projectContentType: {
     type: DataTypes.STRING(100),
-    allowNull: true
+    allowNull: true,
   },
   projectId: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: true,
   },
   enabled: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true
-  }
+    defaultValue: true,
+  },
 };
 
 export const RolePermissionModelAttributes: ModelAttributes = {
@@ -164,23 +164,23 @@ export const RolePermissionModelAttributes: ModelAttributes = {
     allowNull: false,
     references: {
       model: 'nets_core_role',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   permissionId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'nets_core_permission',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   customName: {
     type: DataTypes.STRING(150),
-    allowNull: true
-  }
+    allowNull: true,
+  },
 };
 
 export const UserRoleModelAttributes: ModelAttributes = {
@@ -190,27 +190,27 @@ export const UserRoleModelAttributes: ModelAttributes = {
     allowNull: false,
     references: {
       model: 'users',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   roleId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'nets_core_role',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   projectContentType: {
     type: DataTypes.STRING(100),
-    allowNull: true
+    allowNull: true,
   },
   projectId: {
     type: DataTypes.INTEGER,
-    allowNull: true
-  }
+    allowNull: true,
+  },
 };
 
 export const initPermissionModels = (sequelize: Sequelize) => {
@@ -221,7 +221,7 @@ export const initPermissionModels = (sequelize: Sequelize) => {
     timestamps: true,
     underscored: true,
     createdAt: 'created',
-    updatedAt: 'updated'
+    updatedAt: 'updated',
   });
 
   Role.init(RoleModelAttributes, {
@@ -235,9 +235,9 @@ export const initPermissionModels = (sequelize: Sequelize) => {
     indexes: [
       {
         fields: ['project_content_type', 'project_id'],
-        name: 'role_index'
-      }
-    ]
+        name: 'role_index',
+      },
+    ],
   });
 
   RolePermission.init(RolePermissionModelAttributes, {
@@ -247,7 +247,7 @@ export const initPermissionModels = (sequelize: Sequelize) => {
     timestamps: true,
     underscored: true,
     createdAt: 'created',
-    updatedAt: 'updated'
+    updatedAt: 'updated',
   });
 
   UserRole.init(UserRoleModelAttributes, {
@@ -257,7 +257,7 @@ export const initPermissionModels = (sequelize: Sequelize) => {
     timestamps: true,
     underscored: true,
     createdAt: 'created',
-    updatedAt: 'updated'
+    updatedAt: 'updated',
   });
 
   // Set up associations
@@ -265,14 +265,14 @@ export const initPermissionModels = (sequelize: Sequelize) => {
     through: RolePermission,
     foreignKey: 'roleId',
     otherKey: 'permissionId',
-    as: 'permissions'
+    as: 'permissions',
   });
 
   Permission.belongsToMany(Role, {
     through: RolePermission,
     foreignKey: 'permissionId',
     otherKey: 'roleId',
-    as: 'roles'
+    as: 'roles',
   });
 
   return { Permission, Role, RolePermission, UserRole };

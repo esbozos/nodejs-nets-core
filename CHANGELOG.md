@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-11-12
 
 ### Added
+
 - Initial release of nodejs-nets-core
 - Complete port of django-nets-core to Node.js/Express
 - TypeScript support with full type definitions
@@ -30,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete API documentation
 
 ### Models
+
 - NetsCoreBaseModel - Base model with timestamps and JSON serialization
 - OwnedModel - Base model with user ownership
 - User - User management
@@ -41,11 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UserRole - User-role assignments
 
 ### Services
+
 - EmailService - Email sending with templates
 - FirebaseService - Push notifications
 - AuthService - Authentication and token management
 
 ### Utilities
+
 - Request parameter validation
 - Response helpers
 - IP detection
@@ -53,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Secure caching
 
 ### Security
+
 - JWT-based authentication
 - Password hashing with bcrypt
 - CSRF protection ready
@@ -61,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Secure cache with encryption
 
 ### Documentation
+
 - Comprehensive README
 - API documentation
 - Migration guide
@@ -70,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - Queue system for background jobs (Bull/BeeQueue)
 - SMS service integration
 - OAuth2 provider implementation

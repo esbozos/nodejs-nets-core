@@ -6,17 +6,16 @@ import {
   parseFloat as parseFloatUtil,
   parseDate,
   parseArray,
-  parseObject
+  parseObject,
 } from '../utils';
 import validator from 'validator';
 
 export class RequestParam {
   private errors = {
     required: (key: string) => `Parameter "${key}" is required`,
-    invalidValue: (key: string, value: any, type: ParamType) => 
+    invalidValue: (key: string, value: any, type: ParamType) =>
       `Parameter "${key}" has invalid value "${value}" for type "${type}"`,
-    invalidType: (key: string, type: ParamType) => 
-      `Invalid parameter type "${type}" for "${key}"`
+    invalidType: (key: string, type: ParamType) => `Invalid parameter type "${type}" for "${key}"`,
   };
 
   constructor(
@@ -29,7 +28,7 @@ export class RequestParam {
   private getFileFromRequest(files: any): any {
     try {
       const file = files[this.key];
-      
+
       if (!file && !this.optional) {
         throw new Error(this.errors.required(this.key));
       }
@@ -42,9 +41,7 @@ export class RequestParam {
       if (this.options.filetypes && this.options.filetypes.length > 0) {
         const mimeType = file.mimetype;
         if (!this.options.filetypes.includes(mimeType)) {
-          throw new Error(
-            `File type "${mimeType}" is not allowed for parameter "${this.key}"`
-          );
+          throw new Error(`File type "${mimeType}" is not allowed for parameter "${this.key}"`);
         }
       }
 
@@ -74,7 +71,7 @@ export class RequestParam {
     }
 
     // Check if value is provided
-    if (!value && !this.optional && !(['bool', 'boolean'].includes(this.type as string))) {
+    if (!value && !this.optional && !['bool', 'boolean'].includes(this.type as string)) {
       throw new Error(this.errors.required(this.key));
     }
 
@@ -84,16 +81,22 @@ export class RequestParam {
     }
 
     // Handle dict/object from select components
-    if (typeof value === 'object' && value !== null && 'value' in value && this.type !== 'object' && this.type !== 'dict') {
+    if (
+      typeof value === 'object' &&
+      value !== null &&
+      'value' in value &&
+      this.type !== 'object' &&
+      this.type !== 'dict'
+    ) {
       value = value.value;
     }
 
     // Final check for required values
-    if (value === null && !this.optional && !(['bool', 'boolean'].includes(this.type as string))) {
+    if (value === null && !this.optional && !['bool', 'boolean'].includes(this.type as string)) {
       throw new Error(this.errors.required(this.key));
     }
 
-    if (value === null && !(['bool', 'boolean'].includes(this.type as string))) {
+    if (value === null && !['bool', 'boolean'].includes(this.type as string)) {
       return null;
     }
 
@@ -106,10 +109,10 @@ export class RequestParam {
 
     // Custom validation
     if (this.options.validate) {
-      const isValid = project 
+      const isValid = project
         ? this.options.validate(value, project)
         : this.options.validate(value);
-      
+
       if (!isValid) {
         throw new Error(this.errors.invalidValue(this.key, value, this.type));
       }

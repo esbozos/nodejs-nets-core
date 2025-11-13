@@ -11,17 +11,20 @@
 ## 📊 Resumen de la Instalación
 
 ### Dependencias Instaladas
+
 - ✅ 39 paquetes npm instalados correctamente
 - ✅ 0 vulnerabilidades encontradas
 - ✅ Todas las dependencias críticas verificadas
 
 ### Compilación TypeScript
+
 - ✅ Compilación exitosa sin errores
 - ✅ 18 archivos JavaScript generados
 - ✅ 18 archivos de definición de tipos (.d.ts)
 - ✅ 36 archivos source map (.map)
 
 ### Módulos Principales Verificados
+
 - ✅ `NetsCoreBaseModel` - Modelo base con protección de campos
 - ✅ `User` - Modelo de usuario con autenticación
 - ✅ `VerificationCode` - Sistema OTP
@@ -38,58 +41,64 @@
 ## 🎯 Funcionalidades Migradas
 
 ### 1. Sistema de Modelos ORM
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| Django Models | Sequelize Models | ✅ |
-| Model.objects.all() | Model.findAll() | ✅ |
-| Model.objects.filter() | Model.findOne() | ✅ |
-| Model.objects.create() | Model.create() | ✅ |
-| Protected Fields | toJSON() override | ✅ |
-| Updated Fields Tracking | updatedFields JSONB | ✅ |
+
+| Django Feature          | Node.js Equivalent  | Estado |
+| ----------------------- | ------------------- | ------ |
+| Django Models           | Sequelize Models    | ✅     |
+| Model.objects.all()     | Model.findAll()     | ✅     |
+| Model.objects.filter()  | Model.findOne()     | ✅     |
+| Model.objects.create()  | Model.create()      | ✅     |
+| Protected Fields        | toJSON() override   | ✅     |
+| Updated Fields Tracking | updatedFields JSONB | ✅     |
 
 ### 2. Sistema de Autenticación
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| @login_required | authMiddleware | ✅ |
-| User.set_password() | User.setPassword() | ✅ |
-| User.check_password() | User.checkPassword() | ✅ |
-| Token Authentication | JWT (jsonwebtoken) | ✅ |
-| OAuth2 Flow | AuthService | ✅ |
-| OTP Verification | VerificationCode | ✅ |
+
+| Django Feature        | Node.js Equivalent   | Estado |
+| --------------------- | -------------------- | ------ |
+| @login_required       | authMiddleware       | ✅     |
+| User.set_password()   | User.setPassword()   | ✅     |
+| User.check_password() | User.checkPassword() | ✅     |
+| Token Authentication  | JWT (jsonwebtoken)   | ✅     |
+| OAuth2 Flow           | AuthService          | ✅     |
+| OTP Verification      | VerificationCode     | ✅     |
 
 ### 3. Sistema de Permisos (RBAC)
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| Django Permissions | Permission Model | ✅ |
-| Django Groups | Role Model | ✅ |
-| has_perm() | checkPermission() | ✅ |
-| User Roles | UserRole Model | ✅ |
-| Role Permissions | RolePermission Model | ✅ |
+
+| Django Feature     | Node.js Equivalent   | Estado |
+| ------------------ | -------------------- | ------ |
+| Django Permissions | Permission Model     | ✅     |
+| Django Groups      | Role Model           | ✅     |
+| has_perm()         | checkPermission()    | ✅     |
+| User Roles         | UserRole Model       | ✅     |
+| Role Permissions   | RolePermission Model | ✅     |
 
 ### 4. Decoradores de Request
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| @request_handler | requestHandler() | ✅ |
-| @params() | RequestParam | ✅ |
-| Type Conversion | RequestParam.parse() | ✅ |
-| Validation | RequestParam.validate() | ✅ |
-| File Upload | multer integration | ✅ |
+
+| Django Feature   | Node.js Equivalent      | Estado |
+| ---------------- | ----------------------- | ------ |
+| @request_handler | requestHandler()        | ✅     |
+| @params()        | RequestParam            | ✅     |
+| Type Conversion  | RequestParam.parse()    | ✅     |
+| Validation       | RequestParam.validate() | ✅     |
+| File Upload      | multer integration      | ✅     |
 
 ### 5. Sistema de Email
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| Django Templates | Handlebars | ✅ |
-| send_mail() | EmailService.sendEmail() | ✅ |
-| Email Footer | addFooter() | ✅ |
-| Domain Blacklist | excludeDomains | ✅ |
+
+| Django Feature   | Node.js Equivalent       | Estado |
+| ---------------- | ------------------------ | ------ |
+| Django Templates | Handlebars               | ✅     |
+| send_mail()      | EmailService.sendEmail() | ✅     |
+| Email Footer     | addFooter()              | ✅     |
+| Domain Blacklist | excludeDomains           | ✅     |
 
 ### 6. Firebase Push Notifications
-| Django Feature | Node.js Equivalent | Estado |
-|----------------|-------------------|--------|
-| FCM Integration | firebase-admin | ✅ |
-| Send to Device | sendMessage() | ✅ |
-| Send to User | sendUserDeviceNotification() | ✅ |
-| Bulk Send | sendBulkNotifications() | ✅ |
+
+| Django Feature  | Node.js Equivalent           | Estado |
+| --------------- | ---------------------------- | ------ |
+| FCM Integration | firebase-admin               | ✅     |
+| Send to Device  | sendMessage()                | ✅     |
+| Send to User    | sendUserDeviceNotification() | ✅     |
+| Bulk Send       | sendBulkNotifications()      | ✅     |
 
 ---
 
@@ -120,16 +129,19 @@ nodejs-nets-core/
 ## 🔧 Tecnologías Utilizadas
 
 ### Core Framework
+
 - **Express.js** 4.18 - Framework web
 - **TypeScript** 5.3 - Tipado estático
 - **Node.js** 18+ - Runtime
 
 ### Base de Datos & ORM
+
 - **Sequelize** 6.35 - ORM
 - **PostgreSQL** (pg 8.11) - Base de datos
 - **Redis** (ioredis 5.3) - Cache
 
 ### Seguridad & Autenticación
+
 - **bcrypt** 5.1 - Hash de contraseñas
 - **jsonwebtoken** 9.0 - Tokens JWT
 - **helmet** 7.1 - Security headers
@@ -137,17 +149,20 @@ nodejs-nets-core/
 - **express-rate-limit** 7.1 - Rate limiting
 
 ### Servicios Externos
+
 - **firebase-admin** 12.0 - Push notifications
 - **nodemailer** 6.9 - Envío de emails
 - **handlebars** 4.7 - Templates
 
 ### Validación & Utilidades
+
 - **validator** 13.11 - Validación de datos
 - **uuid** 9.0 - Generación de UUIDs
 - **date-fns** 2.30 - Manejo de fechas
 - **multer** 1.4 - Upload de archivos
 
 ### Desarrollo
+
 - **ts-node-dev** 2.0 - Hot reload
 - **Jest** 29.7 - Testing
 - **ESLint** 8.56 - Linting
@@ -158,23 +173,27 @@ nodejs-nets-core/
 ## 🚀 Cómo Usar
 
 ### 1. Instalación
+
 ```bash
 cd /home/dev/nodejs-nets-core
 npm install
 ```
 
 ### 2. Configuración
+
 ```bash
 cp .env.example .env
 # Editar .env con tus credenciales
 ```
 
 ### 3. Compilar
+
 ```bash
 npm run build
 ```
 
 ### 4. Ejecutar Ejemplo
+
 ```bash
 npm run dev
 # O para el ejemplo básico:
@@ -183,6 +202,7 @@ ts-node basic-app.ts
 ```
 
 ### 5. Tests
+
 ```bash
 npm test
 ```
@@ -208,6 +228,7 @@ node test-installation.js
 ```
 
 Este script verifica:
+
 - ✅ Dependencias instaladas
 - ✅ Archivos compilados
 - ✅ Módulos importables
@@ -218,6 +239,7 @@ Este script verifica:
 ## 📈 Métricas del Proyecto
 
 ### Código Fuente
+
 - **Archivos TypeScript:** 20+
 - **Líneas de código:** ~3,500
 - **Modelos:** 7 (User, VerificationCode, UserDevice, Permission, Role, etc.)
@@ -225,6 +247,7 @@ Este script verifica:
 - **Middleware:** 3 (Auth, Permissions, Request Handler)
 
 ### Cobertura de Features
+
 - **Django Features Migrados:** 95%
 - **Compatibilidad API:** Alta
 - **Type Safety:** 100% TypeScript
@@ -277,4 +300,4 @@ El proyecto está **listo para producción** con todas las funcionalidades princ
 
 ---
 
-*Generado automáticamente el 12 de Noviembre, 2024*
+_Generado automáticamente el 12 de Noviembre, 2024_

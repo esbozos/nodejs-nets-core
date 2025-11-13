@@ -1,70 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verification Code</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .container {
-      background-color: #f4f4f4;
-      padding: 30px;
-      border-radius: 10px;
-    }
-    .header {
-      text-align: center;
-      padding-bottom: 20px;
-    }
-    .code-box {
-      background-color: #fff;
-      border: 2px solid #4CAF50;
-      border-radius: 5px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .code {
-      font-size: 32px;
-      font-weight: bold;
-      color: #4CAF50;
-      letter-spacing: 5px;
-    }
-    .footer {
-      text-align: center;
-      padding-top: 20px;
-      font-size: 12px;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Verification Code</h1>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Verification Code</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .container {
+        background-color: #f4f4f4;
+        padding: 30px;
+        border-radius: 10px;
+      }
+      .header {
+        text-align: center;
+        padding-bottom: 20px;
+      }
+      .code-box {
+        background-color: #fff;
+        border: 2px solid #4caf50;
+        border-radius: 5px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .code {
+        font-size: 32px;
+        font-weight: bold;
+        color: #4caf50;
+        letter-spacing: 5px;
+      }
+      .footer {
+        text-align: center;
+        padding-top: 20px;
+        font-size: 12px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h1>Verification Code</h1>
+      </div>
+
+      <p>Hello {{userName}},</p>
+
+      <p>You have requested a verification code to access your account. Please use the code below:</p>
+
+      <div class='code-box'>
+        <div class='code'>{{code}}</div>
+      </div>
+
+      <p><strong>This code will expire in {{expiresIn}}.</strong></p>
+
+      <p>If you didn't request this code, please ignore this email.</p>
+
+      <div class='footer'>
+        <p>This is an automated message, please do not reply to this email.</p>
+      </div>
     </div>
-    
-    <p>Hello {{userName}},</p>
-    
-    <p>You have requested a verification code to access your account. Please use the code below:</p>
-    
-    <div class="code-box">
-      <div class="code">{{code}}</div>
-    </div>
-    
-    <p><strong>This code will expire in {{expiresIn}}.</strong></p>
-    
-    <p>If you didn't request this code, please ignore this email.</p>
-    
-    <div class="footer">
-      <p>This is an automated message, please do not reply to this email.</p>
-    </div>
-  </div>
-</body>
+  </body>
 </html>

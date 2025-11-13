@@ -8,7 +8,7 @@ export const requestHandler = (options: RequestHandlerOptions = {}) => {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function(req: NetsCoreRequest, res: Response, next: NextFunction) {
+    descriptor.value = async function (req: NetsCoreRequest, res: Response, next: NextFunction) {
       try {
         // Check authentication
         if (!options.public && !req.user) {
@@ -191,13 +191,13 @@ function extractRequestData(req: Request): Record<string, any> {
 
 async function getRequestObject(req: NetsCoreRequest, model: any): Promise<any> {
   const indexField = req.indexField || 'id';
-  
+
   if (!req.params[indexField]) {
     throw new Error(`Index field "${indexField}" not provided`);
   }
 
   const indexValue = req.params[indexField];
-  
+
   const query: any = {};
   query[indexField] = indexValue;
 
@@ -230,7 +230,7 @@ async function getRequestObject(req: NetsCoreRequest, model: any): Promise<any> 
 
 async function checkPermission(user: any, action: string, project?: any): Promise<boolean> {
   if (!user) return false;
-  
+
   // Superusers have all permissions
   if (user.isSuperuser) return true;
 
@@ -241,14 +241,14 @@ async function checkPermission(user: any, action: string, project?: any): Promis
   // Check if it's a role check
   if (action.startsWith('role:')) {
     // const roleName = action.substring(5).toLowerCase();
-    
+
     if (project) {
       // Check project membership role
       // This would need to be implemented based on your project structure
       // For now, return false
       return false;
     }
-    
+
     return false;
   }
 
@@ -263,7 +263,7 @@ async function checkPermission(user: any, action: string, project?: any): Promis
 
   // Check user's roles and permissions
   const userRoles = await user.getRoles?.();
-  
+
   if (!userRoles || userRoles.length === 0) {
     return false;
   }

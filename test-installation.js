@@ -18,7 +18,7 @@ const dependencies = [
   'firebase-admin',
   'ioredis',
   'validator',
-  'uuid'
+  'uuid',
 ];
 
 let failed = false;
@@ -49,7 +49,7 @@ const requiredDirs = [
   'dist/decorators',
   'dist/utils',
   'dist/config',
-  'dist/types'
+  'dist/types',
 ];
 
 for (const dir of requiredDirs) {
@@ -66,34 +66,34 @@ console.log('\n3️⃣ Verificando módulos principales...');
 try {
   const { NetsCoreBaseModel } = require('./dist/models/base');
   console.log('  ✅ NetsCoreBaseModel');
-  
+
   const { User } = require('./dist/models/User');
   console.log('  ✅ User Model');
-  
+
   const { VerificationCode } = require('./dist/models/VerificationCode');
   console.log('  ✅ VerificationCode Model');
-  
+
   const { UserDevice } = require('./dist/models/UserDevice');
   console.log('  ✅ UserDevice Model');
-  
+
   const { Permission, Role } = require('./dist/models/Permission');
   console.log('  ✅ Permission & Role Models');
-  
+
   const { AuthService } = require('./dist/services/auth');
   console.log('  ✅ AuthService');
-  
+
   const { EmailService } = require('./dist/services/email');
   console.log('  ✅ EmailService');
-  
+
   const { FirebaseService } = require('./dist/services/firebase');
   console.log('  ✅ FirebaseService');
-  
+
   const { requestHandlerMiddleware } = require('./dist/decorators');
   console.log('  ✅ requestHandlerMiddleware');
-  
+
   const { authMiddleware } = require('./dist/middleware');
   console.log('  ✅ authMiddleware');
-  
+
   console.log('\n✅ Todos los módulos principales se importaron correctamente.');
 } catch (error) {
   console.log(`\n❌ Error al importar módulos: ${error.message}`);

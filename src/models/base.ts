@@ -6,7 +6,7 @@ import {
   ModelOptions,
   CreationOptional,
   InferAttributes,
-  InferCreationAttributes
+  InferCreationAttributes,
 } from 'sequelize';
 
 export interface NetsCoreBaseModelAttributes {
@@ -18,7 +18,7 @@ export interface NetsCoreBaseModelAttributes {
 
 export class NetsCoreBaseModel<
   TModelAttributes extends object = any,
-  TCreationAttributes extends object = TModelAttributes
+  TCreationAttributes extends object = TModelAttributes,
 > extends Model<
   InferAttributes<NetsCoreBaseModel<TModelAttributes, TCreationAttributes>>,
   InferCreationAttributes<NetsCoreBaseModel<TModelAttributes, TCreationAttributes>>
@@ -54,14 +54,14 @@ export class NetsCoreBaseModel<
       'date_joined',
       'last_login',
       'verified',
-      'updated_fields'
+      'updated_fields',
     ];
   }
 
   toJSON(fields?: string[] | '__all__'): any {
     // Get all attributes from the model
     const values = super.toJSON() as any;
-    
+
     let fieldsToInclude: string[];
 
     if (fields === '__all__') {
@@ -77,11 +77,11 @@ export class NetsCoreBaseModel<
     // Filter protected fields
     const protectedFields = [
       ...(this.constructor as typeof NetsCoreBaseModel).getProtectedFields(),
-      ...(this.constructor as typeof NetsCoreBaseModel).getGlobalProtectedFields()
+      ...(this.constructor as typeof NetsCoreBaseModel).getGlobalProtectedFields(),
     ].map(f => f.toLowerCase());
 
     const result: any = {};
-    
+
     for (const field of fieldsToInclude) {
       const lowerField = field.toLowerCase();
       let isProtected = false;
@@ -118,7 +118,7 @@ export class NetsCoreBaseModel<
     this.updatedFields[field].push({
       old: String(oldValue),
       new: String(newValue),
-      time: new Date().toISOString()
+      time: new Date().toISOString(),
     });
   }
 }
@@ -127,23 +127,23 @@ export const NetsCoreBaseModelAttributes: ModelAttributes = {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
-    primaryKey: true
+    primaryKey: true,
   },
   created: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW
+    defaultValue: DataTypes.NOW,
   },
   updated: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW
+    defaultValue: DataTypes.NOW,
   },
   updatedFields: {
     type: DataTypes.JSONB,
     allowNull: true,
-    defaultValue: null
-  }
+    defaultValue: null,
+  },
 };
 
 export interface OwnedModelAttributes extends NetsCoreBaseModelAttributes {
@@ -152,7 +152,7 @@ export interface OwnedModelAttributes extends NetsCoreBaseModelAttributes {
 
 export class OwnedModel<
   TModelAttributes extends object = any,
-  TCreationAttributes extends object = TModelAttributes
+  TCreationAttributes extends object = TModelAttributes,
 > extends NetsCoreBaseModel<TModelAttributes, TCreationAttributes> {
   declare userId: number;
 }
@@ -164,10 +164,10 @@ export const OwnedModelAttributes: ModelAttributes = {
     allowNull: false,
     references: {
       model: 'users',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
-  }
+    onDelete: 'CASCADE',
+  },
 };
 
 export const initBaseModel = (sequelize: Sequelize) => {

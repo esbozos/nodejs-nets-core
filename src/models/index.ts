@@ -20,46 +20,46 @@ export const initializeModels = (sequelize: Sequelize) => {
   // Set up associations
   User.hasMany(VerificationCode, {
     foreignKey: 'userId',
-    as: 'verificationCodes'
+    as: 'verificationCodes',
   });
 
   VerificationCode.belongsTo(User, {
     foreignKey: 'userId',
-    as: 'user'
+    as: 'user',
   });
 
   User.hasMany(UserDevice, {
     foreignKey: 'userId',
-    as: 'devices'
+    as: 'devices',
   });
 
   UserDevice.belongsTo(User, {
     foreignKey: 'userId',
-    as: 'user'
+    as: 'user',
   });
 
   VerificationCode.belongsTo(UserDevice, {
     foreignKey: 'deviceId',
-    as: 'device'
+    as: 'device',
   });
 
   UserDevice.hasMany(VerificationCode, {
     foreignKey: 'deviceId',
-    as: 'verificationCodes'
+    as: 'verificationCodes',
   });
 
   User.belongsToMany(Role, {
     through: UserRole,
     foreignKey: 'userId',
     otherKey: 'roleId',
-    as: 'roles'
+    as: 'roles',
   });
 
   Role.belongsToMany(User, {
     through: UserRole,
     foreignKey: 'roleId',
     otherKey: 'userId',
-    as: 'users'
+    as: 'users',
   });
 
   return {
@@ -69,6 +69,6 @@ export const initializeModels = (sequelize: Sequelize) => {
     Permission,
     Role,
     RolePermission,
-    UserRole
+    UserRole,
   };
 };

@@ -13,12 +13,12 @@ export const initializeRedis = (config?: NetsCoreConfig['redis']): Redis => {
     retryStrategy: (times: number) => {
       const delay = Math.min(times * 50, 2000);
       return delay;
-    }
+    },
   };
 
   redisInstance = new Redis(options);
-  
-  redisInstance.on('error', (err) => {
+
+  redisInstance.on('error', err => {
     console.error('Redis error:', err);
   });
 
@@ -46,23 +46,20 @@ export const closeRedis = async (): Promise<void> => {
 export class SecureCache {
   private keyPrefix = 'NETS_SK_';
 
-  constructor(private redis: Redis, private secretKey: string) {}
+  constructor(
+    private redis: Redis,
+    private secretKey: string
+  ) {}
 
   private secureKey(key: string): string {
-    const hash = crypto
-      .createHmac('sha256', this.secretKey)
-      .update(key)
-      .digest('hex');
-    
+    const hash = crypto.createHmac('sha256', this.secretKey).update(key).digest('hex');
+
     const fullKey = `${this.keyPrefix}${hash}`;
     return fullKey.substring(0, 250);
   }
 
   private secureValue(value: string): string {
-    return crypto
-      .createHmac('sha256', this.secretKey)
-      .update(value)
-      .digest('hex');
+    return crypto.createHmac('sha256', this.secretKey).update(value).digest('hex');
   }
 
   async set(key: string, value: string, expirationSeconds: number): Promise<void> {

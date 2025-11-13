@@ -42,6 +42,7 @@ npm run release:major
 ```
 
 El script automatizado:
+
 1. ✅ Valida el entorno
 2. ✅ Ejecuta tests
 3. ✅ Ejecuta linter
@@ -93,6 +94,7 @@ npm run release:beta
 ```
 
 Los usuarios pueden instalar con:
+
 ```bash
 npm install nodejs-nets-core@beta
 npm install nodejs-nets-core@alpha
@@ -107,21 +109,26 @@ Antes de cada release, actualiza `CHANGELOG.md` con:
 ## [1.2.3] - 2024-11-12
 
 ### Added
+
 - Nueva funcionalidad X
 - Soporte para Y
 
 ### Changed
+
 - Mejorado rendimiento de Z
 - Actualizada dependencia W
 
 ### Fixed
+
 - Corregido bug en A
 - Solucionado problema con B
 
 ### Deprecated
+
 - Función X será removida en v2.0.0
 
 ### Security
+
 - Actualizada dependencia con vulnerabilidad
 ```
 
@@ -196,6 +203,7 @@ npm token create
 ## 📦 Contenido del Paquete
 
 El paquete publicado incluye:
+
 - ✅ `dist/` - Código JavaScript compilado
 - ✅ `dist/**/*.d.ts` - Type definitions
 - ✅ `templates/` - Email templates
@@ -205,6 +213,7 @@ El paquete publicado incluye:
 - ✅ `.env.example` - Variables de entorno ejemplo
 
 **NO incluye:**
+
 - ❌ `src/` - Código TypeScript fuente
 - ❌ `tests/` - Tests
 - ❌ `scripts/` - Scripts de desarrollo
@@ -229,6 +238,7 @@ Antes de cada release, verifica:
 ## 🔄 Workflow Recomendado
 
 ### Para Bug Fixes:
+
 ```bash
 git checkout -b fix/bug-description
 # ... hacer cambios ...
@@ -241,6 +251,7 @@ npm run release:patch
 ```
 
 ### Para Nuevas Features:
+
 ```bash
 git checkout -b feature/feature-name
 # ... desarrollar feature ...
@@ -253,6 +264,7 @@ npm run release:minor
 ```
 
 ### Para Breaking Changes:
+
 ```bash
 git checkout -b breaking/change-description
 # ... hacer cambios ...

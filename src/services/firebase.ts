@@ -21,12 +21,14 @@ export class FirebaseService {
       } else if (config && config.credentials) {
         credential = admin.credential.cert(config.credentials);
       } else {
-        console.warn('Firebase credentials not provided. Firebase messaging will not be available.');
+        console.warn(
+          'Firebase credentials not provided. Firebase messaging will not be available.'
+        );
         return;
       }
 
       this.app = admin.initializeApp({
-        credential
+        credential,
       });
 
       this.initialized = true;
@@ -57,18 +59,18 @@ export class FirebaseService {
         notification: {
           icon: 'ic_launcher',
           color: '#f45342',
-          channelId: channel
-        }
+          channelId: channel,
+        },
       };
 
       const messagePayload: admin.messaging.Message = {
         token: registrationToken,
         notification: {
           title,
-          body: message
+          body: message,
         },
         android: androidConfig,
-        data: data || {}
+        data: data || {},
       };
 
       const response = await admin.messaging().send(messagePayload);
@@ -95,8 +97,8 @@ export class FirebaseService {
     const devices = await UserDevice.findAll({
       where: {
         userId: user.id,
-        firebaseToken: { $ne: null }
-      } as any
+        firebaseToken: { $ne: null },
+      } as any,
     });
 
     const results: DeviceNotificationResult = {};
@@ -115,7 +117,7 @@ export class FirebaseService {
 
         results[device.id] = {
           success: true,
-          message_id: messageId
+          message_id: messageId,
         };
 
         // TODO: Save notification to database (UserFirebaseNotification model)
@@ -125,12 +127,12 @@ export class FirebaseService {
           await device.destroy();
           results[device.id] = {
             success: false,
-            error: 'Device token unregistered'
+            error: 'Device token unregistered',
           };
         } else {
           results[device.id] = {
             success: false,
-            error: error.message
+            error: error.message,
           };
 
           // TODO: Save failed notification to database
@@ -155,9 +157,9 @@ export class FirebaseService {
       token,
       notification: {
         title,
-        body: message
+        body: message,
       },
-      data: data || {}
+      data: data || {},
     }));
 
     const response = await admin.messaging().sendAll(messages);

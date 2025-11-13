@@ -4,7 +4,7 @@ import {
   ModelAttributes,
   CreationOptional,
   InferAttributes,
-  InferCreationAttributes
+  InferCreationAttributes,
 } from 'sequelize';
 import { NetsCoreBaseModel, NetsCoreBaseModelAttributes } from './base';
 import bcrypt from 'bcrypt';
@@ -41,7 +41,17 @@ export class User extends NetsCoreBaseModel<UserAttributes> {
   declare lastLogin: CreationOptional<Date>;
   declare dateJoined: CreationOptional<Date>;
 
-  static JSON_DATA_FIELDS = ['id', 'email', 'username', 'firstName', 'lastName', 'isActive', 'emailVerified', 'lastLogin', 'dateJoined'];
+  static JSON_DATA_FIELDS = [
+    'id',
+    'email',
+    'username',
+    'firstName',
+    'lastName',
+    'isActive',
+    'emailVerified',
+    'lastLogin',
+    'dateJoined',
+  ];
   static PROTECTED_FIELDS = ['password', 'isStaff', 'isSuperuser'];
 
   async setPassword(password: string): Promise<void> {
@@ -69,55 +79,55 @@ export const UserModelAttributes: ModelAttributes = {
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true
-    }
+      isEmail: true,
+    },
   },
   username: {
     type: DataTypes.STRING(150),
     allowNull: true,
-    unique: true
+    unique: true,
   },
   firstName: {
     type: DataTypes.STRING(150),
-    allowNull: true
+    allowNull: true,
   },
   lastName: {
     type: DataTypes.STRING(150),
-    allowNull: true
+    allowNull: true,
   },
   password: {
     type: DataTypes.STRING(255),
-    allowNull: true
+    allowNull: true,
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true
+    defaultValue: true,
   },
   isStaff: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   },
   isSuperuser: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   },
   emailVerified: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   },
   lastLogin: {
     type: DataTypes.DATE,
-    allowNull: true
+    allowNull: true,
   },
   dateJoined: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW
-  }
+    defaultValue: DataTypes.NOW,
+  },
 };
 
 export const initUserModel = (sequelize: Sequelize): typeof User => {
@@ -137,8 +147,8 @@ export const initUserModel = (sequelize: Sequelize): typeof User => {
         if (user.username) {
           user.username = user.username.toLowerCase();
         }
-      }
-    }
+      },
+    },
   });
 
   return User;

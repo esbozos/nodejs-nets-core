@@ -4,7 +4,7 @@ import { SuccessResponseData, ErrorResponseData } from '../types';
 export const successResponse = (data: any, extra?: any): SuccessResponseData => {
   const response: SuccessResponseData = {
     res: 1,
-    data
+    data,
   };
 
   if (extra) {
@@ -23,9 +23,9 @@ export const errorResponse = (
     response: {
       res: 0,
       message,
-      data
+      data,
     },
-    statusCode
+    statusCode,
   };
 };
 
@@ -50,7 +50,7 @@ export const sendErrorResponse = (
   return res.status(statusCode).json({
     res: 0,
     message,
-    data
+    data,
   });
 };
 

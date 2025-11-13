@@ -1,5 +1,4 @@
 {
-  
   "name": "@meregy/nodejs-nets-core",
   "version": "1.0.0",
   "description": "A comprehensive Express.js framework for Node.js applications providing lazy API request handlers, authentication, permissions, email notifications, push notifications and common tasks - Port of django-nets-core",

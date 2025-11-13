@@ -76,29 +76,30 @@ const netsCore = new NetsCoreApp({
     port: 5432,
     database: 'mydb',
     username: 'user',
-    password: 'password'
+    password: 'password',
   },
   redis: {
     host: 'localhost',
-    port: 6379
+    port: 6379,
   },
   jwt: {
     secret: 'your-secret-key',
-    accessTokenExpire: '30d'
-  }
+    accessTokenExpire: '30d',
+  },
 });
 
 // Apply middleware
 netsCore.applyMiddleware(app);
 
 // Define a protected route with parameter validation
-app.post('/api/example',
+app.post(
+  '/api/example',
   requestHandler({
     params: [
       new RequestParam('name', 'string'),
-      new RequestParam('age', 'int', true) // optional
+      new RequestParam('age', 'int', true), // optional
     ],
-    public: false // requires authentication
+    public: false, // requires authentication
   }),
   async (req, res) => {
     const { name, age } = req.params;
@@ -117,27 +118,26 @@ app.listen(3000, () => {
 
 ```typescript
 // 1. Request verification code
-app.post('/auth/login',
+app.post(
+  '/auth/login',
   requestHandler({
-    params: [
-      new RequestParam('email', 'email'),
-      new RequestParam('device', 'object', true)
-    ],
-    public: true
+    params: [new RequestParam('email', 'email'), new RequestParam('device', 'object', true)],
+    public: true,
   }),
   authController.login
 );
 
 // 2. Authenticate with code
-app.post('/auth/authenticate',
+app.post(
+  '/auth/authenticate',
   requestHandler({
     params: [
       new RequestParam('email', 'email'),
       new RequestParam('code', 'string'),
       new RequestParam('client_id', 'string'),
-      new RequestParam('client_secret', 'string')
+      new RequestParam('client_secret', 'string'),
     ],
-    public: true
+    public: true,
   }),
   authController.authenticate
 );
@@ -156,9 +156,9 @@ const response = await fetch('/auth/login', {
       name: 'iPhone 14',
       os: 'iOS',
       os_version: '17.0',
-      firebase_token: 'device-fcm-token'
-    }
-  })
+      firebase_token: 'device-fcm-token',
+    },
+  }),
 });
 
 const { device_uuid } = await response.json();
@@ -172,8 +172,8 @@ const authResponse = await fetch('/auth/authenticate', {
     code: '123456',
     client_id: 'your-client-id',
     client_secret: 'your-client-secret',
-    device_uuid
-  })
+    device_uuid,
+  }),
 });
 
 const { access_token, refresh_token, user } = await authResponse.json();
@@ -181,8 +181,8 @@ const { access_token, refresh_token, user } = await authResponse.json();
 // Use access_token for authenticated requests
 fetch('/api/protected', {
   headers: {
-    'Authorization': `Bearer ${access_token}`
-  }
+    Authorization: `Bearer ${access_token}`,
+  },
 });
 ```
 
@@ -193,25 +193,26 @@ The `requestHandler` decorator provides automatic parameter validation and type 
 ```typescript
 import { requestHandler, RequestParam } from 'nodejs-nets-core';
 
-app.post('/api/create-post',
+app.post(
+  '/api/create-post',
   requestHandler({
     params: [
       new RequestParam('title', 'string'),
       new RequestParam('content', 'string'),
       new RequestParam('published', 'bool', true, { default: false }),
       new RequestParam('publish_date', 'datetime', true),
-      new RequestParam('tags', 'list', true)
+      new RequestParam('tags', 'list', true),
     ],
     public: false, // requires authentication
-    canDo: 'blog.create_post' // permission check
+    canDo: 'blog.create_post', // permission check
   }),
   async (req, res) => {
     // All parameters are validated and available in req.params
     const { title, content, published, publish_date, tags } = req.params;
-    
+
     // req.user is automatically populated
     // req.perm indicates if user has the required permission
-    
+
     res.json({ res: 1, data: 'Post created' });
   }
 );
@@ -241,14 +242,14 @@ import { Permission, Role } from 'nodejs-nets-core/models';
 const createPostPerm = await Permission.create({
   codename: 'blog.create_post',
   name: 'Can create blog posts',
-  description: 'Allows user to create new blog posts'
+  description: 'Allows user to create new blog posts',
 });
 
 // Create role
 const editorRole = await Role.create({
   codename: 'editor',
   name: 'Editor',
-  description: 'Blog editor role'
+  description: 'Blog editor role',
 });
 
 // Assign permission to role
@@ -259,10 +260,11 @@ await editorRole.addPermission(createPostPerm);
 
 ```typescript
 // Method 1: Using canDo parameter
-app.post('/api/posts',
+app.post(
+  '/api/posts',
   requestHandler({
     canDo: 'blog.create_post',
-    permRequired: true // deny access if permission not granted
+    permRequired: true, // deny access if permission not granted
   }),
   createPostHandler
 );
@@ -270,15 +272,13 @@ app.post('/api/posts',
 // Method 2: Using middleware
 import { checkPermission } from 'nodejs-nets-core/middleware';
 
-app.delete('/api/posts/:id',
-  checkPermission('blog.delete_post'),
-  deletePostHandler
-);
+app.delete('/api/posts/:id', checkPermission('blog.delete_post'), deletePostHandler);
 
 // Method 3: Role-based check
-app.get('/api/admin',
+app.get(
+  '/api/admin',
   requestHandler({
-    canDo: 'role:admin' // check if user has admin role
+    canDo: 'role:admin', // check if user has admin role
   }),
   adminHandler
 );
@@ -290,14 +290,15 @@ app.get('/api/admin',
 // Configure project models
 netsCore.configure({
   projectModel: 'Project',
-  projectMemberModel: 'ProjectMember'
+  projectMemberModel: 'ProjectMember',
 });
 
 // Routes automatically check project membership
-app.post('/api/projects/:projectId/data',
+app.post(
+  '/api/projects/:projectId/data',
   requestHandler({
     projectRequired: true,
-    canDo: 'project.edit_data'
+    canDo: 'project.edit_data',
   }),
   async (req, res) => {
     // req.project - current project instance
@@ -320,9 +321,9 @@ const [sent, reason, description] = await sendEmail({
   template: 'emails/welcome.hbs',
   context: {
     username: 'John Doe',
-    activation_link: 'https://...'
+    activation_link: 'https://...',
   },
-  toQueued: true // queue for batch sending
+  toQueued: true, // queue for batch sending
 });
 
 if (!sent) {
@@ -336,15 +337,15 @@ Create Handlebars templates in your templates directory:
 
 ```handlebars
 <!-- templates/emails/welcome.hbs -->
-<!DOCTYPE html>
+
 <html>
-<head>
-  <title>Welcome</title>
-</head>
-<body>
-  <h1>Welcome {{username}}!</h1>
-  <p>Click <a href="{{activation_link}}">here</a> to activate your account.</p>
-</body>
+  <head>
+    <title>Welcome</title>
+  </head>
+  <body>
+    <h1>Welcome {{username}}!</h1>
+    <p>Click <a href='{{activation_link}}'>here</a> to activate your account.</p>
+  </body>
 </html>
 ```
 
@@ -354,14 +355,10 @@ Create Handlebars templates in your templates directory:
 netsCore.configure({
   email: {
     from: 'noreply@example.com',
-    excludeDomains: [
-      'tempmail*',
-      'guerrillamail.com',
-      '10minutemail.com'
-    ],
+    excludeDomains: ['tempmail*', 'guerrillamail.com', '10minutemail.com'],
     footer: '<p>© 2024 MyCompany</p>',
-    debugEnabled: false // don't send emails in development
-  }
+    debugEnabled: false, // don't send emails in development
+  },
 });
 ```
 
@@ -372,8 +369,8 @@ netsCore.configure({
 ```typescript
 netsCore.configure({
   firebase: {
-    credentialsPath: './firebase-credentials.json'
-  }
+    credentialsPath: './firebase-credentials.json',
+  },
 });
 ```
 
@@ -389,7 +386,7 @@ const results = await sendUserDeviceNotification(
   'You have a new message from John',
   {
     type: 'message',
-    messageId: '12345'
+    messageId: '12345',
   },
   'messages' // notification channel
 );
@@ -492,15 +489,15 @@ const netsCore = new NetsCoreApp({
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    logging: false
+    logging: false,
   },
   redis: {
     host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT)
+    port: parseInt(process.env.REDIS_PORT),
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    accessTokenExpire: process.env.ACCESS_TOKEN_EXPIRE || '30d'
+    accessTokenExpire: process.env.ACCESS_TOKEN_EXPIRE || '30d',
   },
   email: {
     host: process.env.SMTP_HOST,
@@ -508,28 +505,28 @@ const netsCore = new NetsCoreApp({
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD
+      pass: process.env.SMTP_PASSWORD,
     },
     from: process.env.DEFAULT_FROM_EMAIL,
     excludeDomains: ['tempmail*'],
-    debugEnabled: false
+    debugEnabled: false,
   },
   firebase: {
-    credentialsPath: process.env.FIREBASE_CONFIG
+    credentialsPath: process.env.FIREBASE_CONFIG,
   },
   verificationCode: {
     expireSeconds: 15 * 60, // 15 minutes
     debugCode: '123456',
     testersEmails: ['google_tester*'],
-    testersCode: '789654'
+    testersCode: '789654',
   },
   security: {
     globalProtectedFields: ['password', 'token', 'secret'],
     rateLimitWindowMs: 15 * 60 * 1000,
-    rateLimitMax: 100
+    rateLimitMax: 100,
   },
   projectModel: 'Project', // optional for multi-project support
-  projectMemberModel: 'ProjectMember' // optional
+  projectMemberModel: 'ProjectMember', // optional
 });
 ```
 
@@ -541,22 +538,22 @@ const netsCore = new NetsCoreApp({
 interface RequestHandlerOptions {
   // Model to load based on index field
   model?: any;
-  
+
   // Field to use as identifier (default: 'id')
   indexField?: string;
-  
+
   // Permission to check
   canDo?: string;
-  
+
   // Require permission (deny if not granted)
   permRequired?: boolean;
-  
+
   // Request parameters to validate
   params?: RequestParam[];
-  
+
   // Allow unauthenticated access
   public?: boolean;
-  
+
   // Require project context
   projectRequired?: boolean;
 }
@@ -567,15 +564,15 @@ interface RequestHandlerOptions {
 ```typescript
 class RequestParam {
   constructor(
-    key: string,           // Parameter name
-    type: ParamType,       // Data type
-    optional?: boolean,    // Is optional?
+    key: string, // Parameter name
+    type: ParamType, // Data type
+    optional?: boolean, // Is optional?
     options?: {
-      default?: any,       // Default value
-      validate?: Function, // Custom validator
-      filetypes?: string[] // For file uploads
+      default?: any; // Default value
+      validate?: Function; // Custom validator
+      filetypes?: string[]; // For file uploads
     }
-  )
+  );
 }
 ```
 
@@ -586,7 +583,7 @@ import {
   successResponse,
   errorResponse,
   notFoundResponse,
-  permissionDenied
+  permissionDenied,
 } from 'nodejs-nets-core/responses';
 
 // Success with data
@@ -615,8 +612,8 @@ Configure tester emails that bypass OTP verification:
 netsCore.configure({
   verificationCode: {
     testersEmails: ['google_tester*', 'test@example.com'],
-    testersCode: '475638' // static code for testers
-  }
+    testersCode: '475638', // static code for testers
+  },
 });
 ```
 

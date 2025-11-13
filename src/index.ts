@@ -20,7 +20,7 @@ export class NetsCoreApp {
   private async initialize() {
     // Initialize database
     const sequelize = initializeDatabase(this.config.database);
-    
+
     // Initialize models
     initializeModels(sequelize);
 
@@ -42,10 +42,12 @@ export class NetsCoreApp {
     app.use(helmet());
 
     // CORS
-    app.use(cors({
-      credentials: true,
-      origin: true
-    }));
+    app.use(
+      cors({
+        credentials: true,
+        origin: true,
+      })
+    );
 
     // Body parsing
     app.use(express.json({ limit: '10mb' }));
@@ -56,7 +58,7 @@ export class NetsCoreApp {
       const limiter = rateLimit({
         windowMs: this.config.security.rateLimitWindowMs,
         max: this.config.security.rateLimitMax,
-        message: 'Too many requests from this IP, please try again later.'
+        message: 'Too many requests from this IP, please try again later.',
       });
       app.use(limiter);
     }

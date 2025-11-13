@@ -40,13 +40,13 @@ export class AuthService {
 
   private generateAccessToken(userId: number): string {
     return jwt.sign({ userId, type: 'access' }, this.jwtSecret, {
-      expiresIn: this.accessTokenExpire as string | number
+      expiresIn: this.accessTokenExpire as string | number,
     } as jwt.SignOptions);
   }
 
   private generateRefreshToken(userId: number): string {
     return jwt.sign({ userId, type: 'refresh' }, this.jwtSecret, {
-      expiresIn: this.refreshTokenExpire as string | number
+      expiresIn: this.refreshTokenExpire as string | number,
     } as jwt.SignOptions);
   }
 
@@ -62,10 +62,10 @@ export class AuthService {
     const value = parseInt(amount, 10);
 
     const multipliers: Record<string, number> = {
-      d: 24 * 60 * 60 * 1000,  // days
-      h: 60 * 60 * 1000,        // hours
-      m: 60 * 1000,             // minutes
-      s: 1000                   // seconds
+      d: 24 * 60 * 60 * 1000, // days
+      h: 60 * 60 * 1000, // hours
+      m: 60 * 1000, // minutes
+      s: 1000, // seconds
     };
 
     const expiry = new Date(Date.now() + value * multipliers[unit]);
@@ -80,7 +80,7 @@ export class AuthService {
     try {
       // Find or create user
       let user = await User.findByEmail(emailOrUsername);
-      
+
       if (!user) {
         user = await User.findByUsername(emailOrUsername);
       }
@@ -91,7 +91,7 @@ export class AuthService {
         user = await User.create({
           email: isEmail ? emailOrUsername : `${emailOrUsername}@placeholder.com`,
           username: isEmail ? undefined : emailOrUsername,
-          isActive: true
+          isActive: true,
         } as any);
       }
 
@@ -104,10 +104,10 @@ export class AuthService {
       // Create verification code
       const verificationCode = await VerificationCode.create({
         userId: user.id,
-        token: '',  // Will be set in generateAndSaveToken
+        token: '', // Will be set in generateAndSaveToken
         deviceId: device?.id,
         verified: false,
-        ip
+        ip,
       } as any);
 
       // Generate and save token
@@ -133,13 +133,13 @@ export class AuthService {
       return {
         success: true,
         deviceUuid: device?.uuid,
-        message: 'Verification code sent'
+        message: 'Verification code sent',
       };
     } catch (error: any) {
       console.error('Login error:', error);
       return {
         success: false,
-        message: error.message || 'Login failed'
+        message: error.message || 'Login failed',
       };
     }
   }
@@ -169,7 +169,7 @@ export class AuthService {
     // Find latest verification code
     const verificationCode = await VerificationCode.findOne({
       where: { userId: user.id, verified: false },
-      order: [['created', 'DESC']]
+      order: [['created', 'DESC']],
     } as any);
 
     if (!verificationCode) {
@@ -185,7 +185,7 @@ export class AuthService {
     // Update device last login if device provided
     if (deviceUuid) {
       const device = await UserDevice.findOne({
-        where: { uuid: deviceUuid, userId: user.id }
+        where: { uuid: deviceUuid, userId: user.id },
       } as any);
 
       if (device) {
@@ -214,11 +214,13 @@ export class AuthService {
       accessToken,
       refreshToken,
       tokenExpire,
-      user: user.toJSON()
+      user: user.toJSON(),
     };
   }
 
-  async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string; tokenExpire: Date }> {
+  async refreshAccessToken(
+    refreshToken: string
+  ): Promise<{ accessToken: string; tokenExpire: Date }> {
     try {
       const decoded = jwt.verify(refreshToken, this.jwtSecret) as any;
 

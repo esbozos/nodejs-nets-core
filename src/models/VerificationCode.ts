@@ -1,9 +1,4 @@
-import {
-  DataTypes,
-  Sequelize,
-  ModelAttributes,
-  CreationOptional
-} from 'sequelize';
+import { DataTypes, Sequelize, ModelAttributes, CreationOptional } from 'sequelize';
 import { OwnedModel, OwnedModelAttributes } from './base';
 import { getRedis } from '../config/redis';
 import bcrypt from 'bcrypt';
@@ -56,10 +51,14 @@ export class VerificationCode extends OwnedModel<VerificationCodeAttributes> {
     return false;
   }
 
-  async generateAndSaveToken(userEmail: string, isDebug: boolean = false, emailDebugEnabled: boolean = false): Promise<string> {
+  async generateAndSaveToken(
+    userEmail: string,
+    isDebug: boolean = false,
+    emailDebugEnabled: boolean = false
+  ): Promise<string> {
     const redis = getRedis();
     const cacheKey = this.getTokenCacheKey();
-    
+
     let token: string;
     const isTester = VerificationCode.isTesterEmail(userEmail);
 
@@ -117,26 +116,26 @@ export const VerificationCodeModelAttributes: ModelAttributes = {
   ...OwnedModelAttributes,
   token: {
     type: DataTypes.STRING(255),
-    allowNull: false
+    allowNull: false,
   },
   deviceId: {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
       model: 'nets_core_user_device',
-      key: 'id'
+      key: 'id',
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   verified: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+    defaultValue: false,
   },
   ip: {
     type: DataTypes.STRING(150),
-    allowNull: true
-  }
+    allowNull: true,
+  },
 };
 
 export const initVerificationCodeModel = (sequelize: Sequelize): typeof VerificationCode => {
@@ -147,7 +146,7 @@ export const initVerificationCodeModel = (sequelize: Sequelize): typeof Verifica
     timestamps: true,
     underscored: true,
     createdAt: 'created',
-    updatedAt: 'updated'
+    updatedAt: 'updated',
   });
 
   return VerificationCode;

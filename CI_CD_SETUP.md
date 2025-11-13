@@ -3,6 +3,7 @@
 ## ✅ Workflows Configurados
 
 ### 1. **ci.yml** - Continuous Integration
+
 - **Trigger**: Push/PR a main, master, develop
 - **Acciones**:
   - ✅ Lint (ESLint + Prettier)
@@ -14,6 +15,7 @@
 - **Badge**: `[![CI](https://github.com/esbozos/nodejs-nets-core/actions/workflows/ci.yml/badge.svg)](https://github.com/esbozos/nodejs-nets-core/actions/workflows/ci.yml)`
 
 ### 2. **release.yml** - Automated Release & Publish
+
 - **Trigger**: Push de tags `v*.*.*` (ej: v1.0.0)
 - **Acciones**:
   - ✅ Valida código (lint, test, build)
@@ -27,6 +29,7 @@
   ```
 
 ### 3. **pr-validation.yml** - Pull Request Validation
+
 - **Trigger**: Abrir/Actualizar PR
 - **Acciones**:
   - ✅ Valida título de PR (conventional commits)
@@ -37,6 +40,7 @@
   - ✅ Comenta resultado en el PR
 
 ### 4. **codeql.yml** - Security Analysis
+
 - **Trigger**: Push/PR + schedule semanal
 - **Acciones**:
   - ✅ Análisis estático de seguridad (CodeQL)
@@ -44,6 +48,7 @@
   - ✅ Escaneo de calidad de código
 
 ### 5. **dependabot.yml** - Dependency Updates
+
 - **Schedule**: Semanal (lunes 09:00)
 - **Acciones**:
   - ✅ Actualiza dependencias npm
@@ -82,6 +87,7 @@
 ## 📝 Workflow de Desarrollo
 
 ### Desarrollo diario:
+
 ```bash
 # 1. Crear feature branch
 git checkout -b feature/nueva-funcionalidad
@@ -97,6 +103,7 @@ git push origin feature/nueva-funcionalidad
 ```
 
 ### Crear release:
+
 ```bash
 # 1. Asegurarse de estar en master actualizado
 git checkout master
@@ -117,6 +124,7 @@ git push origin master --tags
 ```
 
 ### Alternativa rápida con script:
+
 ```bash
 # Ejecutar script interactivo
 ./scripts/release.sh patch  # o minor, major
@@ -135,6 +143,7 @@ git push origin master --tags
 ## 🛡️ Security & Quality Gates
 
 ### Antes de merge a master:
+
 - ✅ Lint debe pasar (ESLint)
 - ✅ Formato correcto (Prettier)
 - ✅ Build sin errores (TypeScript)
@@ -143,19 +152,22 @@ git push origin master --tags
 - ✅ Type checking correcto
 
 ### Antes de publicar release:
+
 - ✅ Todos los checks de CI
-- ✅ Tag con formato correcto (v*.*.*)
+- ✅ Tag con formato correcto (v*.*.\*)
 - ✅ NPM_TOKEN válido
 - ✅ Tests passing
 
 ## 📊 Monitoreo
 
 ### Ver estado de workflows:
+
 - GitHub Actions: https://github.com/esbozos/nodejs-nets-core/actions
 - npm package: https://www.npmjs.com/package/@meregy/nodejs-nets-core
 - Security alerts: Settings → Security → Dependabot alerts
 
 ### Logs y debugging:
+
 - Cada workflow guarda logs detallados
 - Build artifacts guardados 7 días
 - Coverage reports en artefactos
@@ -163,24 +175,30 @@ git push origin master --tags
 ## 🔧 Mantenimiento
 
 ### Actualizar Node.js versions en CI:
+
 Editar `.github/workflows/ci.yml`:
+
 ```yaml
 strategy:
   matrix:
-    node-version: [18, 20, 22, 23]  # Añadir/quitar versiones
+    node-version: [18, 20, 22, 23] # Añadir/quitar versiones
 ```
 
 ### Cambiar frecuencia de Dependabot:
+
 Editar `.github/dependabot.yml`:
+
 ```yaml
 schedule:
-  interval: "daily"  # o "weekly", "monthly"
+  interval: 'daily' # o "weekly", "monthly"
 ```
 
 ### Modificar nivel de npm audit:
+
 Editar `.github/workflows/ci.yml`:
+
 ```yaml
-run: npm audit --audit-level=critical  # o moderate, high
+run: npm audit --audit-level=critical # o moderate, high
 ```
 
 ## 📚 Documentación
@@ -217,6 +235,7 @@ git push origin master --tags
 ## ✨ Todo está listo!
 
 El proyecto ahora tiene:
+
 - ✅ CI completo en cada PR y push
 - ✅ Releases automáticos con tags
 - ✅ Security scanning continuo

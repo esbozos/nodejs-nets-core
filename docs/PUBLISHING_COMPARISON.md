@@ -2,22 +2,23 @@
 
 ## 📊 Tabla Comparativa
 
-| Aspecto | Django/PyPI | Node.js/npm | Recomendación |
-|---------|-------------|-------------|---------------|
-| **Package Manager** | PyPI (pip) | npm/yarn/pnpm | npm (estándar) |
-| **Versioning** | setup.py/setup.cfg | package.json | package.json ✅ |
-| **Build** | python setup.py sdist | npm run build | TypeScript compiler |
-| **Publish** | twine upload | npm publish | npm publish ✅ |
-| **Auth** | .pypirc | npm login / token | npm token (CI/CD) |
-| **Pre-release** | N/A en setup.py | npm tags (beta/alpha) | npm dist-tags ✅ |
-| **Semantic Versioning** | Manual | npm version | Automatizado ✅ |
-| **Changelog** | Manual | Manual + automated | Usar conventional commits |
-| **Testing before publish** | Manual | prepublishOnly script | Hook automatizado ✅ |
-| **Type definitions** | N/A | .d.ts incluidos | TypeScript nativo ✅ |
+| Aspecto                    | Django/PyPI           | Node.js/npm           | Recomendación             |
+| -------------------------- | --------------------- | --------------------- | ------------------------- |
+| **Package Manager**        | PyPI (pip)            | npm/yarn/pnpm         | npm (estándar)            |
+| **Versioning**             | setup.py/setup.cfg    | package.json          | package.json ✅           |
+| **Build**                  | python setup.py sdist | npm run build         | TypeScript compiler       |
+| **Publish**                | twine upload          | npm publish           | npm publish ✅            |
+| **Auth**                   | .pypirc               | npm login / token     | npm token (CI/CD)         |
+| **Pre-release**            | N/A en setup.py       | npm tags (beta/alpha) | npm dist-tags ✅          |
+| **Semantic Versioning**    | Manual                | npm version           | Automatizado ✅           |
+| **Changelog**              | Manual                | Manual + automated    | Usar conventional commits |
+| **Testing before publish** | Manual                | prepublishOnly script | Hook automatizado ✅      |
+| **Type definitions**       | N/A                   | .d.ts incluidos       | TypeScript nativo ✅      |
 
 ## 🆚 Tu Script Django vs Scripts Node.js
 
 ### Script Django Original (`sync_and_build.sh`)
+
 ```bash
 # ❌ Manual version parsing con grep/sed
 version=$(grep -oP '(?<=version = ).*' setup.cfg)
@@ -30,6 +31,7 @@ twine upload --config=.pypirc dist/django_nets_core-$version.tar.gz
 ```
 
 **Problemas:**
+
 - ⚠️ Solo incrementa patch (último número)
 - ⚠️ No ejecuta tests antes de publicar
 - ⚠️ No crea tags de git automáticamente
@@ -53,6 +55,7 @@ npm publish --access public
 ```
 
 **Ventajas:**
+
 - ✅ Semantic versioning completo (patch/minor/major)
 - ✅ Tests y linting automáticos
 - ✅ Git tags automáticos
@@ -63,6 +66,7 @@ npm publish --access public
 ## 🎯 Mejores Prácticas Adoptadas
 
 ### 1. **Conventional Commits**
+
 ```bash
 # Django (antes)
 git commit -m "fix"
@@ -74,6 +78,7 @@ git commit -m "feat!: change API signature for UserDevice"
 ```
 
 ### 2. **Pre-publish Hooks**
+
 ```json
 {
   "scripts": {
@@ -81,10 +86,12 @@ git commit -m "feat!: change API signature for UserDevice"
   }
 }
 ```
+
 ❌ Django: Sin validación automática
 ✅ Node.js: Imposible publicar si fallan tests
 
 ### 3. **Semantic Versioning Automático**
+
 ```bash
 # Django: Solo patch manual
 ./sync_and_build.sh  # 1.0.0 -> 1.0.1
@@ -96,6 +103,7 @@ npm run release:major  # 1.0.0 -> 2.0.0 (breaking)
 ```
 
 ### 4. **Pre-releases**
+
 ```bash
 # Django: No soportado nativamente
 # Requeriría cambiar nombre del paquete o sufijo manual
@@ -107,6 +115,7 @@ npm install pkg@latest  # Usuarios instalan stable
 ```
 
 ### 5. **Verificación Pre-release**
+
 ```bash
 # Django: Manual
 python3 setup.py check
@@ -160,6 +169,7 @@ graph LR
 ## 🚀 Casos de Uso
 
 ### Caso 1: Bug Fix Release
+
 ```bash
 # Django (antes)
 # 1. Editar setup.cfg manualmente
@@ -173,6 +183,7 @@ npm run release:patch
 ```
 
 ### Caso 2: Nueva Feature
+
 ```bash
 # Django (antes)
 # 1. Editar setup.cfg manualmente (cambiar segundo número)
@@ -185,6 +196,7 @@ npm run release:minor
 ```
 
 ### Caso 3: Breaking Change
+
 ```bash
 # Django (antes)
 # 1. Editar setup.cfg manualmente (cambiar primer número)
@@ -198,6 +210,7 @@ npm run release:major
 ```
 
 ### Caso 4: Beta Release
+
 ```bash
 # Django (antes)
 # No soportado
@@ -212,6 +225,7 @@ npm run release:beta
 ## 🔐 Seguridad y Autenticación
 
 ### Django/PyPI
+
 ```ini
 # .pypirc (credenciales en texto plano)
 [pypi]
@@ -220,6 +234,7 @@ password = pypi-xxxxxxxxxxxxx
 ```
 
 ### Node.js/npm
+
 ```bash
 # Token como variable de entorno
 export NPM_TOKEN=xxxxxxxxxxxxx
@@ -234,29 +249,29 @@ NPM_TOKEN en secrets
 
 ## 📈 Ventajas del Nuevo Sistema
 
-| Ventaja | Descripción | Impacto |
-|---------|-------------|---------|
-| **Menos errores** | Validación automática pre-publish | 🔴→🟢 Alto |
-| **Más rápido** | 1 comando vs proceso manual | 🟡→🟢 Medio |
-| **Semantic versioning** | Versionado correcto automático | 🔴→🟢 Alto |
-| **Git integration** | Tags automáticos, commits | 🟡→🟢 Medio |
-| **Rollback** | Reversión si falla | 🔴→🟢 Alto |
-| **Pre-releases** | Beta/alpha support nativo | ❌→🟢 Alto |
-| **Type safety** | .d.ts incluidos automáticamente | ❌→🟢 Alto |
-| **CI/CD friendly** | Scripts para automatización | 🟡→🟢 Alto |
+| Ventaja                 | Descripción                       | Impacto     |
+| ----------------------- | --------------------------------- | ----------- |
+| **Menos errores**       | Validación automática pre-publish | 🔴→🟢 Alto  |
+| **Más rápido**          | 1 comando vs proceso manual       | 🟡→🟢 Medio |
+| **Semantic versioning** | Versionado correcto automático    | 🔴→🟢 Alto  |
+| **Git integration**     | Tags automáticos, commits         | 🟡→🟢 Medio |
+| **Rollback**            | Reversión si falla                | 🔴→🟢 Alto  |
+| **Pre-releases**        | Beta/alpha support nativo         | ❌→🟢 Alto  |
+| **Type safety**         | .d.ts incluidos automáticamente   | ❌→🟢 Alto  |
+| **CI/CD friendly**      | Scripts para automatización       | 🟡→🟢 Alto  |
 
 ## 🎓 Comandos Equivalentes
 
-| Tarea | Django | Node.js |
-|-------|--------|---------|
-| Ver versión actual | `grep version setup.cfg` | `npm run version:check` |
-| Incrementar patch | `./sync_and_build.sh` | `npm run release:patch` |
-| Incrementar minor | Manual en setup.cfg | `npm run release:minor` |
-| Incrementar major | Manual en setup.cfg | `npm run release:major` |
-| Publicar | `twine upload` | `npm publish` |
-| Ver en registry | Ver PyPI web | `npm view nodejs-nets-core` |
-| Instalar específica | `pip install pkg==1.0.0` | `npm install pkg@1.0.0` |
-| Descargar stats | PyPI stats web | `npm-stat.com` |
+| Tarea               | Django                   | Node.js                     |
+| ------------------- | ------------------------ | --------------------------- |
+| Ver versión actual  | `grep version setup.cfg` | `npm run version:check`     |
+| Incrementar patch   | `./sync_and_build.sh`    | `npm run release:patch`     |
+| Incrementar minor   | Manual en setup.cfg      | `npm run release:minor`     |
+| Incrementar major   | Manual en setup.cfg      | `npm run release:major`     |
+| Publicar            | `twine upload`           | `npm publish`               |
+| Ver en registry     | Ver PyPI web             | `npm view nodejs-nets-core` |
+| Instalar específica | `pip install pkg==1.0.0` | `npm install pkg@1.0.0`     |
+| Descargar stats     | PyPI stats web           | `npm-stat.com`              |
 
 ## ✅ Checklist de Migración
 
@@ -272,12 +287,14 @@ NPM_TOKEN en secrets
 ## 🔄 Próximos Pasos
 
 1. **Configurar npm account**
+
    ```bash
    npm login
    npm whoami
    ```
 
 2. **Primera publicación**
+
    ```bash
    npm run release:patch
    ```

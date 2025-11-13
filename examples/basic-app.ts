@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import { 
-  NetsCoreApp, 
-  requestHandlerMiddleware, 
+import {
+  NetsCoreApp,
+  requestHandlerMiddleware,
   RequestParam,
   authMiddleware,
   requireAuth,
@@ -11,7 +11,7 @@ import {
   initializeEmailService,
   initializeFirebaseService,
   sendSuccessResponse,
-  sendErrorResponse
+  sendErrorResponse,
 } from 'nodejs-nets-core';
 
 // Load environment variables
@@ -28,16 +28,16 @@ const netsCore = new NetsCoreApp({
     database: process.env.DB_NAME || 'mydb',
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'password',
-    logging: false
+    logging: false,
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379')
+    port: parseInt(process.env.REDIS_PORT || '6379'),
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'change-this-secret',
     accessTokenExpire: process.env.ACCESS_TOKEN_EXPIRE || '30d',
-    refreshTokenExpire: process.env.REFRESH_TOKEN_EXPIRE || '90d'
+    refreshTokenExpire: process.env.REFRESH_TOKEN_EXPIRE || '90d',
   },
   email: {
     host: process.env.SMTP_HOST,
@@ -45,26 +45,26 @@ const netsCore = new NetsCoreApp({
     secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: process.env.SMTP_USER || '',
-      pass: process.env.SMTP_PASSWORD || ''
+      pass: process.env.SMTP_PASSWORD || '',
     },
     from: process.env.DEFAULT_FROM_EMAIL || 'noreply@example.com',
     excludeDomains: (process.env.EMAIL_EXCLUDE_DOMAINS || '').split(',').filter(Boolean),
-    debugEnabled: process.env.EMAIL_DEBUG_ENABLED === 'true'
+    debugEnabled: process.env.EMAIL_DEBUG_ENABLED === 'true',
   },
   firebase: {
-    credentialsPath: process.env.FIREBASE_CONFIG
+    credentialsPath: process.env.FIREBASE_CONFIG,
   },
   verificationCode: {
     expireSeconds: parseInt(process.env.VERIFICATION_CODE_EXPIRE_SECONDS || '900'),
     debugCode: process.env.VERIFICATION_CODE_DEBUG_CODE || '123456',
     testersEmails: (process.env.VERIFICATION_CODE_TESTERS_EMAILS || '').split(',').filter(Boolean),
-    testersCode: process.env.VERIFICATION_CODE_TESTERS_CODE || '789654'
+    testersCode: process.env.VERIFICATION_CODE_TESTERS_CODE || '789654',
   },
   security: {
     rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'),
-    rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX || '100')
+    rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX || '100'),
   },
-  templatesDir: process.env.TEMPLATES_DIR || './templates'
+  templatesDir: process.env.TEMPLATES_DIR || './templates',
 });
 
 // Apply middleware
@@ -83,27 +83,25 @@ const authService = getAuthService();
 authService.registerApplication({
   clientId: 'your-client-id',
   clientSecret: 'your-client-secret',
-  name: 'My Application'
+  name: 'My Application',
 });
 
 // ========== AUTH ROUTES ==========
 
 // Login - Request verification code
-app.post('/auth/login',
+app.post(
+  '/auth/login',
   requestHandlerMiddleware({
-    params: [
-      new RequestParam('email', 'email'),
-      new RequestParam('device', 'object', true)
-    ],
-    public: true
+    params: [new RequestParam('email', 'email'), new RequestParam('device', 'object', true)],
+    public: true,
   }),
   async (req, res) => {
     const { email, device } = req.params;
     const result = await authService.login(email, device, req.ip);
-    
+
     if (result.success) {
       return sendSuccessResponse(res, 'Verification code sent', {
-        device_uuid: result.deviceUuid
+        device_uuid: result.deviceUuid,
       });
     } else {
       return sendErrorResponse(res, result.message, 400);
@@ -112,21 +110,22 @@ app.post('/auth/login',
 );
 
 // Authenticate with verification code
-app.post('/auth/authenticate',
+app.post(
+  '/auth/authenticate',
   requestHandlerMiddleware({
     params: [
       new RequestParam('email', 'email'),
       new RequestParam('code', 'string'),
       new RequestParam('client_id', 'string'),
       new RequestParam('client_secret', 'string'),
-      new RequestParam('device_uuid', 'string', true)
+      new RequestParam('device_uuid', 'string', true),
     ],
-    public: true
+    public: true,
   }),
   async (req, res) => {
     try {
       const { email, code, client_id, client_secret, device_uuid } = req.params;
-      
+
       const tokens = await authService.authenticate(
         email,
         code,
@@ -134,7 +133,7 @@ app.post('/auth/authenticate',
         client_secret,
         device_uuid
       );
-      
+
       return sendSuccessResponse(res, tokens);
     } catch (error: any) {
       return sendErrorResponse(res, error.message, 400);
@@ -143,37 +142,32 @@ app.post('/auth/authenticate',
 );
 
 // Logout
-app.post('/auth/logout',
-  requireAuth(),
-  async (req, res) => {
-    // Token is handled on client side
-    return sendSuccessResponse(res, 'Logged out successfully');
-  }
-);
+app.post('/auth/logout', requireAuth(), async (req, res) => {
+  // Token is handled on client side
+  return sendSuccessResponse(res, 'Logged out successfully');
+});
 
 // Get user profile
-app.get('/auth/profile',
-  requireAuth(),
-  async (req, res) => {
-    return sendSuccessResponse(res, req.user.toJSON());
-  }
-);
+app.get('/auth/profile', requireAuth(), async (req, res) => {
+  return sendSuccessResponse(res, req.user.toJSON());
+});
 
 // ========== EXAMPLE PROTECTED ROUTE ==========
 
-app.post('/api/posts',
+app.post(
+  '/api/posts',
   requestHandlerMiddleware({
     params: [
       new RequestParam('title', 'string'),
       new RequestParam('content', 'string'),
-      new RequestParam('published', 'bool', true, { default: false })
+      new RequestParam('published', 'bool', true, { default: false }),
     ],
     public: false, // requires authentication
     // canDo: 'blog.create_post', // optional permission check
   }),
   async (req, res) => {
     const { title, content, published } = req.params;
-    
+
     // Your logic here
     const post = {
       id: 1,
@@ -181,9 +175,9 @@ app.post('/api/posts',
       content,
       published,
       author: req.user.id,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
-    
+
     return sendSuccessResponse(res, post);
   }
 );

@@ -11,7 +11,7 @@ export const getClientIp = (req: NetsCoreRequest): string | null => {
     'HTTP_FORWARDED_FOR',
     'HTTP_FORWARDED',
     'HTTP_VIA',
-    'REMOTE_ADDR'
+    'REMOTE_ADDR',
   ];
 
   for (const header of META_PRECEDENCE_ORDER) {
@@ -79,18 +79,18 @@ export const parseFloat = (value: any): number => {
 
 export const parseDate = (value: any): Date => {
   if (value instanceof Date) return value;
-  
+
   const date = new Date(value);
   if (isNaN(date.getTime())) {
     throw new Error(`Invalid date: ${value}`);
   }
-  
+
   return date;
 };
 
 export const parseArray = (value: any): any[] => {
   if (Array.isArray(value)) return value;
-  
+
   if (typeof value === 'string') {
     try {
       const parsed = JSON.parse(value);
@@ -104,7 +104,7 @@ export const parseArray = (value: any): any[] => {
         .filter(v => v.length > 0);
     }
   }
-  
+
   throw new Error(`Cannot convert "${value}" to array`);
 };
 
@@ -112,7 +112,7 @@ export const parseObject = (value: any): Record<string, any> => {
   if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
     return value;
   }
-  
+
   if (typeof value === 'string') {
     try {
       const parsed = JSON.parse(value);
@@ -123,6 +123,6 @@ export const parseObject = (value: any): Record<string, any> => {
       throw new Error(`Cannot parse object from string: ${value}`);
     }
   }
-  
+
   throw new Error(`Cannot convert "${value}" to object`);
 };

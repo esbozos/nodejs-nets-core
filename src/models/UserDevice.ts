@@ -1,9 +1,4 @@
-import {
-  DataTypes,
-  Sequelize,
-  ModelAttributes,
-  CreationOptional
-} from 'sequelize';
+import { DataTypes, Sequelize, ModelAttributes, CreationOptional } from 'sequelize';
 import { OwnedModel, OwnedModelAttributes } from './base';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -40,15 +35,21 @@ export class UserDevice extends OwnedModel<UserDeviceAttributes> {
   declare ip: CreationOptional<string>;
 
   static JSON_DATA_FIELDS = [
-    'id', 'uuid', 'userId', 'name', 'os', 'osVersion', 
-    'appVersion', 'deviceType', 'active', 'lastLogin', 'ip'
+    'id',
+    'uuid',
+    'userId',
+    'name',
+    'os',
+    'osVersion',
+    'appVersion',
+    'deviceType',
+    'active',
+    'lastLogin',
+    'ip',
   ];
   static PROTECTED_FIELDS = ['deviceToken', 'firebaseToken'];
 
-  static async validateAndCreateOrUpdate(
-    userId: number,
-    deviceData: any
-  ): Promise<UserDevice> {
+  static async validateAndCreateOrUpdate(userId: number, deviceData: any): Promise<UserDevice> {
     const validFields = [
       'name',
       'os',
@@ -58,7 +59,7 @@ export class UserDevice extends OwnedModel<UserDeviceAttributes> {
       'appVersion',
       'deviceId',
       'deviceType',
-      'uuid'
+      'uuid',
     ];
 
     const filteredData: any = {};
@@ -71,7 +72,7 @@ export class UserDevice extends OwnedModel<UserDeviceAttributes> {
     // If UUID is provided, try to update existing device
     if (deviceData.uuid) {
       const existingDevice = await UserDevice.findOne({
-        where: { uuid: deviceData.uuid, userId } as any
+        where: { uuid: deviceData.uuid, userId } as any,
       });
 
       if (existingDevice) {
@@ -85,7 +86,7 @@ export class UserDevice extends OwnedModel<UserDeviceAttributes> {
     // New device - check if firebase token already exists
     if (deviceData.firebaseToken) {
       const existingDevice = await UserDevice.findOne({
-        where: { firebaseToken: deviceData.firebaseToken, userId } as any
+        where: { firebaseToken: deviceData.firebaseToken, userId } as any,
       });
 
       if (existingDevice) {
@@ -99,7 +100,7 @@ export class UserDevice extends OwnedModel<UserDeviceAttributes> {
       ...filteredData,
       userId,
       uuid: uuidv4(),
-      active: true
+      active: true,
     });
 
     return newDevice;
@@ -112,49 +113,49 @@ export const UserDeviceModelAttributes: ModelAttributes = {
     type: DataTypes.UUID,
     allowNull: false,
     unique: true,
-    defaultValue: DataTypes.UUIDV4
+    defaultValue: DataTypes.UUIDV4,
   },
   name: {
     type: DataTypes.STRING(250),
-    allowNull: false
+    allowNull: false,
   },
   os: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   osVersion: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   appVersion: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   deviceType: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   deviceToken: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   firebaseToken: {
     type: DataTypes.STRING(250),
-    allowNull: true
+    allowNull: true,
   },
   active: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true
+    defaultValue: true,
   },
   lastLogin: {
     type: DataTypes.DATE,
-    allowNull: true
+    allowNull: true,
   },
   ip: {
     type: DataTypes.STRING(250),
-    allowNull: true
-  }
+    allowNull: true,
+  },
 };
 
 export const initUserDeviceModel = (sequelize: Sequelize): typeof UserDevice => {
@@ -165,7 +166,7 @@ export const initUserDeviceModel = (sequelize: Sequelize): typeof UserDevice => 
     timestamps: true,
     underscored: true,
     createdAt: 'created',
-    updatedAt: 'updated'
+    updatedAt: 'updated',
   });
 
   return UserDevice;
