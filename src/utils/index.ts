@@ -47,6 +47,7 @@ export const slugify = (text: string): string => {
 };
 
 export const isValidEmail = (email: string): boolean => {
+  if(email.length > 180) return false;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
